@@ -1,0 +1,296 @@
+{#- قالب سایت رزومه — با build.py پردازش و به output/index.html تبدیل می‌شود -#}
+{% macro icon_svg(name) -%}
+{%- if name == "email" -%}
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z"/></svg>
+{%- elif name == "github" -%}
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.68.41.35.78 1.05.78 2.12v3.15c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+{%- elif name == "linkedin" -%}
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.72C24 .77 23.2 0 22.22 0Z"/></svg>
+{%- else -%}
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm7.93 9h-3.02a15.7 15.7 0 0 0-1.2-5.34A8.03 8.03 0 0 1 19.93 11ZM12 4.06c.96 1.2 1.99 3.37 2.38 6.94H9.62c.39-3.57 1.42-5.74 2.38-6.94ZM4.07 13h3.02c.16 1.98.62 3.8 1.2 5.34A8.03 8.03 0 0 1 4.07 13Zm3.02-2H4.07a8.03 8.03 0 0 1 4.22-5.34A15.7 15.7 0 0 0 7.09 11ZM12 19.94c-.96-1.2-1.99-3.37-2.38-6.94h4.76c-.39 3.57-1.42 5.74-2.38 6.94Zm2.69-1.6c.58-1.54 1.04-3.36 1.2-5.34h3.02a8.03 8.03 0 0 1-4.22 5.34Z"/></svg>
+{%- endif -%}
+{%- endmacro %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ resume.name }} — Resume</title>
+  <meta name="description" content="Personal resume website of {{ resume.name }}, {{ resume.role }}.">
+  <style>
+    /* ---------- Theme ---------- */
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --card: #111c2e;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.15);
+        --border: #24324a;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 32px 16px;
+    }
+
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      padding: 44px 40px 32px;
+      background: linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%);
+      color: #9d174d;
+    }
+    .name {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+    .role {
+      font-size: 1.15rem;
+      opacity: 0.92;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-top: 18px;
+      font-size: 0.92rem;
+    }
+    .contacts a {
+      color: #9d174d;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.95;
+      border-bottom: 1px solid rgba(157, 23, 77, 0.3);
+    }
+    .contacts a:hover { opacity: 1; border-bottom-color: #9d174d; }
+    .contacts svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+
+    /* ---------- Sections ---------- */
+    main { padding: 36px 40px 44px; }
+
+    section { margin-bottom: 32px; }
+    section:last-child { margin-bottom: 0; }
+
+    h2 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent-soft);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    p { color: var(--text); }
+
+    /* ---------- Experience / Education ---------- */
+    .entry { margin-bottom: 22px; }
+    .entry:last-child { margin-bottom: 0; }
+
+    .entry-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 4px 12px;
+    }
+    .entry-title { font-weight: 700; font-size: 1.02rem; }
+    .entry-org { color: var(--accent); font-weight: 600; }
+    .entry-date {
+      font-size: 0.85rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .entry ul {
+      margin: 8px 0 0 2px;
+      padding-left: 18px;
+    }
+    .entry li { margin-bottom: 4px; color: var(--text); }
+
+    /* ---------- Skills ---------- */
+    .skill-group { margin-bottom: 14px; }
+    .skill-group:last-child { margin-bottom: 0; }
+    .skill-label { font-weight: 600; margin-bottom: 8px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.87rem;
+      font-weight: 600;
+    }
+
+    /* ---------- Projects ---------- */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .project {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: var(--bg);
+    }
+    .project h3 { font-size: 1rem; margin-bottom: 6px; }
+    .project h3 a { color: var(--accent); text-decoration: none; }
+    .project h3 a:hover { text-decoration: underline; }
+    .project p { font-size: 0.9rem; color: var(--muted); }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 18px 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 560px) {
+      header, main { padding-left: 22px; padding-right: 22px; }
+      .name { font-size: 1.65rem; }
+    }
+
+    /* ---------- Print (Save as PDF) ---------- */
+    @media print {
+      body { padding: 0; background: #fff; }
+      .page { border: none; box-shadow: none; border-radius: 0; max-width: none; }
+      header, .chip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- ============ HEADER ============ -->
+    <header>
+      <h1 class="name">{{ resume.name }}</h1>
+      <div class="role">{{ resume.role }}</div>
+      <div class="contacts">
+        {% for contact in resume.contacts %}
+        <a href="{{ contact.url }}"{% if contact.url.startswith("http") %} target="_blank" rel="noopener"{% endif %}>
+          {{ icon_svg(contact.icon) }}{{ contact.label }}
+        </a>
+        {% endfor %}
+      </div>
+    </header>
+
+    <main>
+      <!-- ============ ABOUT ============ -->
+      <section>
+        <h2>About</h2>
+        <p>{{ resume.about }}</p>
+      </section>
+
+      <!-- ============ EXPERIENCE ============ -->
+      <section>
+        <h2>Experience</h2>
+        {% for job in resume.experience %}
+        <div class="entry">
+          <div class="entry-top">
+            <div>
+              <span class="entry-title">{{ job.title }}</span>
+              <span class="entry-org"> — {{ job.company }}</span>
+            </div>
+            <div class="entry-date">{{ job.date }}</div>
+          </div>
+          <ul>
+            {% for item in job.highlights %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- ============ PROJECTS ============ -->
+      {% if resume.projects %}
+      <section>
+        <h2>Projects</h2>
+        <div class="projects">
+          {% for project in resume.projects %}
+          <div class="project">
+            <h3><a href="{{ project.url }}" target="_blank" rel="noopener">{{ project.name }}</a></h3>
+            <p>{{ project.description }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <!-- ============ SKILLS ============ -->
+      <section>
+        <h2>Skills</h2>
+        {% for group in resume.skills %}
+        <div class="skill-group">
+          <div class="skill-label">{{ group.category }}</div>
+          <div class="chips">
+            {% for skill in group.tags %}
+            <span class="chip">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+
+      <!-- ============ EDUCATION ============ -->
+      {% if resume.education %}
+      <section>
+        <h2>Education</h2>
+        {% for edu in resume.education %}
+        <div class="entry">
+          <div class="entry-top">
+            <div>
+              <span class="entry-title">{{ edu.title }}</span>
+              {% if edu.school %}<span class="entry-org"> — {{ edu.school }}</span>{% endif %}
+            </div>
+            {% if edu.date %}<div class="entry-date">{{ edu.date }}</div>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      {% endif %}
+    </main>
+
+    <footer>
+      © {{ year }} {{ resume.name }} · Built with Python &amp; Jinja2 · Hosted on Cloudflare Pages
+    </footer>
+  </div>
+</body>
+</html>
